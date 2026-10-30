@@ -1,7 +1,5 @@
-# 2FA-TOTP-Authenticator (utility, test version 0.2.0)
-
-One-time codes (**TOTP**, RFC 6238) for two-factor sign-in, on the UNA watch. SHA-1, SHA-256 and SHA-512, 6 to 8 digits, any period (the usual: SHA-1, 6 digits, 30 s). **Nothing of it has run on a watch yet**: it was built and tested on the PC and in the simulator; the watch is the test.
-
+# 2FA-TOTP-Authenticator
+One-time codes (**TOTP**, RFC 6238) for two-factor sign-in, on the UNA watch. SHA-1, SHA-256 and SHA-512, 6 to 8 digits, any period (the usual: SHA-1, 6 digits, 30 s).
 ## Using it
 **Everywhere: L1 up, L2 down, R1 choose, R2 back.**
 
@@ -30,26 +28,6 @@ There is no camera, and entering a 32-letter key with four buttons is no fun. So
 * **The field of the phone app is not secret storage** (the SDK says so: "plaintext on a FAT volume that is readable over USB and over BLE"). The key sits in `app_config.json` **from the moment the phone writes it until the app is opened on the watch**. After that the field is empty. The phone app may keep what you typed (its own memory); that is outside this app. And a file system does not really erase: the flash may hold older copies after the file was written over.
 * Whoever has the watch and its file system can **delete** `vault.dat` (the keys are then gone; keep the recovery codes of your services).
 * The codes are right only if the time is. A watch that has not been connected to the phone for long can be off by seconds.
-
-## Tests (on the PC)
-`Tools/run_test.sh` runs three tests:
-* `Tools/test_ta.py`: the SHA-1/256/512 and HMAC against Python's `hashlib`/`hmac` (663 cases), the codes against the **RFC 6238 test vectors** (18) and against Python for 600 random keys, times, digits and periods, and the readers (otpauth lines, Google Authenticator export built in Python as protobuf, Aegis JSON, plain lines, the form).
-* `Tools/test_vault.py`: the vault against Python (`hashlib.pbkdf2_hmac`, `hmac`) **in both directions** (Python decrypts what the app wrote, the app reads what Python wrote), damaged files, a new salt and nonce for every file, the change of the PIN.
-* `Tools/test_app.cpp`: the program: first start and PIN (a PIN of six: the wheel goes to OK; a vault of the older version with a PIN of four opens; a password with all four layers), a wrong PIN, the form of the phone app (added, emptied), import files (zeros before removal, nothing erased when the vault cannot be written), the same key twice, removing, changing the PIN, locking, a damaged vault.
-`Tools/run_media.sh` makes the pictures in `Media/` (screenshots, one sheet, an animated picture) from the same code on the PC; they are what the watch is meant to show, not photos from a watch.
-
-## Build
-`export UNA_SDK=.../una-sdk`, then `cmake -S Software/Apps/WristAuth-CMake -B Software/Apps/WristAuth-CMake/build && cmake --build Software/Apps/WristAuth-CMake/build`; the `.uapp` is in `Output/` (create the folder first). The screen part needs about 317 KB of RAM. Simulator: `cd Software/Apps/TouchGFX-GUI && make -f simulator/gcc/Makefile`, then start `build/bin/simulator.out` from a folder five levels below the folder `Output/` that holds the files of the app (`WRISTAUTH_SIM_SCRIPT` names a script of keys and screenshots, see `MainView.cpp`).
-`python3 .../una-sdk/Utilities/Scripts/app_packer/validate_app_config.py --check app-manifest.json --check-bounds Software/Apps/TouchGFX-GUI/gui/src/model/AppConfigFields.cpp` checks the declaration of the form against the table in the program.
-
-## The parts
-* `gui/src/ta/Sha.cpp` - SHA-1/256/512, HMAC. `Account.cpp` - the codes, Base32/Base64, the readers. `Vault.cpp` - the encrypted file. `App.cpp` - the program. No watch code in these, so they run on the PC.
-* `gui/src/model/Model.cpp` - the watch: files, the clock, the form of the phone app (`SDK::AppConfig`). `Software/Libs/Sources/Service.cpp` - the time (from the system clock) and the light.
-
-## Not known yet
-* How long the key of the PIN takes on the watch (20,000 rounds of HMAC-SHA-256 is about 40,000 hash blocks; on a 160 MHz Cortex-M33 I expect 1 to 3 seconds, not measured).
-* Whether `SDK::AppConfig` in the screen part (not the service) works on the watch as it does in the simulator (the SDK allows it: "a GUI process that reads the configuration itself must add the sources").
-* Whether the time of the watch is exact enough (it comes from the phone).
 
 ## Licence
 MIT (see `LICENSE`). The project skeleton comes from the MIT-licensed templates of the UNA SDK; see `THIRD-PARTY-LICENSES.md`. **The software comes without any warranty: it is a test version, it has not run on a watch yet and its encryption has not been reviewed by others** - do not rely on it as the only copy of your second factors.
