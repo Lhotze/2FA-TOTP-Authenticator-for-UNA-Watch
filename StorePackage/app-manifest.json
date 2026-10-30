@@ -1,0 +1,83 @@
+{
+  "manifest_version": 1,
+  "type": [
+    "utility"
+  ],
+  "name": "2FA-TOTP-Authenticator",
+  "icon": "icon.png",
+  "binary": "2FA-TOTP-Authenticator_0.2.0.uapp",
+  "appVersion": "0.2.0",
+  "minKernelVersion": "1.4.0",
+  "requiredHardware": [],
+  "description": "One-time codes (TOTP, RFC 6238) for two-factor sign-in, on your wrist. Add an account by pasting the long secret key that a service shows instead of the QR code into the field of the app on the phone: the watch reads it once, puts it into its encrypted vault and empties the field. Or copy a file import.txt (otpauth links, the export link of Google Authenticator) or import.json (an unencrypted export of Aegis) into the folder of the app. A PIN (4 to 6 digits, entered on a wheel that jumps to OK after the last digit) or, if you like, a password of 6 to 24 characters opens the vault; the keys are in an encrypted file. Shows the code of one account big, with the name of the service in big letters, with the seconds that are left, the next code when the time runs out, or all codes in a list. SHA-1, SHA-256 and SHA-512, 6 to 8 digits, any period. An account can only be removed in the app, after a question. The keys are only as safe as the PIN: see ABOUT. The time comes from the phone.",
+  "configFile": "app_config.json",
+  "configFields": [
+    {
+      "id": "newCode",
+      "type": "string",
+      "label": "Secret key or link",
+      "description": "Paste the long code (secret key) that the service shows instead of its QR code, or the otpauth:// link. The watch reads it once, when you open the app, and the field is emptied.",
+      "default": "",
+      "minLength": 0,
+      "maxLength": 128
+    },
+    {
+      "id": "newName",
+      "type": "string",
+      "label": "Account name",
+      "description": "Shown under the name of the service, for example the user name. Optional.",
+      "default": "",
+      "minLength": 0,
+      "maxLength": 27
+    },
+    {
+      "id": "newIssuer",
+      "type": "string",
+      "label": "Service",
+      "description": "The name of the service, for example GitHub. Optional if the link has it.",
+      "default": "",
+      "minLength": 0,
+      "maxLength": 23
+    },
+    {
+      "id": "newDigits",
+      "type": "int",
+      "label": "Digits",
+      "description": "How many digits the code has (almost always 6).",
+      "default": 6,
+      "min": 6,
+      "max": 8
+    },
+    {
+      "id": "newPeriod",
+      "type": "int",
+      "label": "Period",
+      "description": "How long a code holds (almost always 30 seconds).",
+      "default": 30,
+      "min": 10,
+      "max": 120,
+      "unit": "s"
+    },
+    {
+      "id": "newAlgo",
+      "type": "string",
+      "label": "Algorithm",
+      "description": "SHA1, SHA256 or SHA512 (almost always SHA1).",
+      "default": "SHA1",
+      "minLength": 0,
+      "maxLength": 6,
+      "pattern": "SHA1|SHA256|SHA512",
+      "validationMessage": "SHA1, SHA256 or SHA512."
+    }
+  ],
+  "id": "6760712F32F8E82A",
+  "stravaExport": false,
+  "supportsLaps": false,
+  "supportsDistance": false,
+  "supportsTrack": false,
+  "supportsHeartbeat": false,
+  "supportsElevation": false,
+  "supportsStep": false,
+  "supportsSpeed": "none",
+  "customMeasures": []
+}

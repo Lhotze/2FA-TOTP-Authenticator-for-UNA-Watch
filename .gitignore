@@ -1,0 +1,11 @@
+# build results and what the tools make
+build/
+Output/
+*.uapp
+*.zip
+*.map
+Tools/test_app
+Tools/test_ta
+Tools/__pycache__/
+Media/raw/
+*.o
