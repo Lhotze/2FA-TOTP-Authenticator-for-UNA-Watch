@@ -50,3 +50,6 @@ There is no camera, and entering a 32-letter key with four buttons is no fun. So
 * How long the key of the PIN takes on the watch (20,000 rounds of HMAC-SHA-256 is about 40,000 hash blocks; on a 160 MHz Cortex-M33 I expect 1 to 3 seconds, not measured).
 * Whether `SDK::AppConfig` in the screen part (not the service) works on the watch as it does in the simulator (the SDK allows it: "a GUI process that reads the configuration itself must add the sources").
 * Whether the time of the watch is exact enough (it comes from the phone).
+
+## Licence
+MIT (see `LICENSE`). The project skeleton comes from the MIT-licensed templates of the UNA SDK; see `THIRD-PARTY-LICENSES.md`. **The software comes without any warranty: it is a test version, it has not run on a watch yet and its encryption has not been reviewed by others** - do not rely on it as the only copy of your second factors.
